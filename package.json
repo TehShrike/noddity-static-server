@@ -4,7 +4,7 @@
   "description": "Serves up static HTML based on a Noddity source server",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified :-(\" && exit 0"
   },
   "repository": {
     "type": "git",
@@ -21,5 +21,23 @@
   "bugs": {
     "url": "https://github.com/TehShrike/noddity-static-server/issues"
   },
-  "homepage": "https://github.com/TehShrike/noddity-static-server#readme"
+  "homepage": "https://github.com/TehShrike/noddity-static-server#readme",
+  "devDependencies": {
+    "babel-plugin-transform-async-to-generator": "6.16.0",
+    "babel-polyfill": "6.16.0",
+    "babel-register": "6.16.3",
+    "level-mem": "0.18.0",
+    "ms": "0.7.1",
+    "noddity-butler": "~2.6.0"
+  },
+  "dependencies": {
+    "koa": "2.0.0-alpha.7",
+    "koa-compress": "2.0.0",
+    "koa-conditional-get": "2.0.0",
+    "koa-router": "7.0.1",
+    "noddity-linkifier": "~2.2.2",
+    "noddity-render-static": "~2.4.0",
+    "ractive": "0.8.9",
+    "then-denodeify": "1.0.0"
+  }
 }
