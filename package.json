@@ -1,0 +1,25 @@
+{
+  "name": "noddity-static-server",
+  "version": "1.0.0",
+  "description": "Serves up static HTML based on a Noddity source server",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/TehShrike/noddity-static-server.git"
+  },
+  "keywords": [
+    "noddity",
+    "static",
+    "html",
+    "server"
+  ],
+  "author": "TehShrike",
+  "license": "WTFPL",
+  "bugs": {
+    "url": "https://github.com/TehShrike/noddity-static-server/issues"
+  },
+  "homepage": "https://github.com/TehShrike/noddity-static-server#readme"
+}
