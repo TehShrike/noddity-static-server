@@ -6,6 +6,8 @@ This module gives you a function that creates a server that will pull the markdo
 
 # Usage
 
+[![Greenkeeper badge](https://badges.greenkeeper.io/TehShrike/noddity-static-server.svg)](https://greenkeeper.io/)
+
 The function exported by this server creates a new [Koa](http://koajs.com/) app.  Call `app.callback()` to get a function with traditional middleware signature.
 
 Example usage:
