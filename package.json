@@ -23,11 +23,11 @@
   },
   "homepage": "https://github.com/TehShrike/noddity-static-server#readme",
   "devDependencies": {
-    "babel-plugin-transform-async-to-generator": "6.16.0",
-    "babel-polyfill": "6.16.0",
-    "babel-register": "6.16.3",
+    "babel-plugin-transform-async-to-generator": "6.22.0",
+    "babel-polyfill": "6.22.0",
+    "babel-register": "6.22.0",
     "level-mem": "0.18.0",
-    "ms": "0.7.1",
+    "ms": "0.7.2",
     "noddity-butler": "~2.6.0"
   },
   "dependencies": {
@@ -35,9 +35,9 @@
     "koa-compress": "2.0.0",
     "koa-conditional-get": "2.0.0",
     "koa-router": "7.0.1",
-    "noddity-linkifier": "~2.2.2",
+    "noddity-linkifier": "~3.0.0",
     "noddity-render-static": "~2.4.0",
-    "ractive": "0.8.9",
-    "then-denodeify": "1.0.0"
+    "ractive": "0.8.10",
+    "then-denodeify": "1.0.1"
   }
 }
