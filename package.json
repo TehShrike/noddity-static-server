@@ -1,6 +1,6 @@
 {
   "name": "noddity-static-server",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "description": "Serves up static HTML based on a Noddity source server",
   "main": "index.js",
   "scripts": {
