@@ -33,7 +33,7 @@
     "noddity-linkifier": "~2.2.2",
     "noddity-render-static": "~2.4.0",
     "noddity-butler": "~2.6.0",
-    "noddity-lazy-static-render": "1.0.0"
+    "noddity-lazy-static-render": "~1.0.1"
   },
   "dependencies": {
     "koa": "2.0.0-alpha.7",
