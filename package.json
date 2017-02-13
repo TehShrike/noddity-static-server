@@ -4,7 +4,7 @@
   "description": "Serves up static HTML based on a Noddity source server",
   "main": "index.js",
   "scripts": {
-    "test": "node test/server.js"
+    "test-server": "node test/server.js"
   },
   "repository": {
     "type": "git",
