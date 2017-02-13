@@ -6,12 +6,13 @@ This module gives you a function that creates a server that will pull the markdo
 
 # Usage
 
-The function exported by this server creates a new [Koa](http://koajs.com/) app.  Call `app.callback()` to get a function with traditional middleware signature.
+The function exported by this server creates a new [koa-router](https://github.com/alexmingoia/koa-router) instance.
 
 Example usage:
 
 ```js
 const noddityStaticServer = require('noddity-static-server')
+const makeLazyRenderer = require('noddity-lazy-static-render')
 
 const Butler = require('noddity-butler')
 const level = require('level-mem')
@@ -20,20 +21,36 @@ const indexHtml = require('fs').readFileSync('./index.html', { encoding: 'utf8' 
 
 const contentUrl = 'https://content.yoursite.com/'
 
-const app = noddityStaticServer({
-	assetsUrl: 'https://assets.yoursite.com/',
-	nonMarkdownContentUrl: contentUrl,
-	indexHtml,
+const lazyRender = makeLazyRenderer({
+	butler,
 	data: {
 		title: 'Site name here',
 		pathPrefix: '/',
 		pagePathPrefix: '',
 	},
-	butler: Butler(contentUrl, level('server'), {
-		refreshEvery: 1000 * 60 * 5,
-		parallelPostRequests: 10
-	})
+	indexHtml
 })
+
+const staticServerRouter = noddityStaticServer({
+	assetsUrl: 'https://assets.yoursite.com/',
+	nonMarkdownContentUrl: contentUrl,
+	butler,
+	lazyRender
+})
+
+const router = Router()
+const app = new Koa()
+
+router.use('', staticServerRouter.routes(), staticServerRouter.allowedMethods())
+
+router.get('/custom', async function customPage(context, next) {
+	context.body = 'This is a custom response, separate from the noddity-static-server routes!'
+})
+
+app.use(conditionalGet())
+app.use(compress())
+
+app.use(router.routes(), router.allowedMethods())
 
 app.listen(8000)
 ```
@@ -46,9 +63,7 @@ Some things this module currently does:
 - serves up `index.md` when you visit `/`
 - returns 301 redirects to paths starting with the `assetsUrl` when a request comes to `/assets/*`
 - for any requests matching `/*.(jpg|jpeg|gif|png)`, returns a 301 redirect to the same path at `nonMarkdownContentUrl`
-- for any route not matching another rule, attempts to serve up `404.md` rendered to HTML
 - sets Last-Modified headers on page responses, using the last time when a post change was detected
-- compresses all responses
 
 # Node compatibility
 
@@ -65,7 +80,17 @@ require(`babel-polyfill`)
 require(`babel-register`)({
 	plugins: [
 		`transform-async-to-generator`,
-	]
+	],
+	ignore: function(path) {
+		// false => transpile with babel
+		const nodeModules = /\/node_modules\//.test(path)
+
+		if (nodeModules) {
+			return !/\/noddity-static-server\//.test(path)
+		}
+
+		return false
+	}
 })
 ```
 

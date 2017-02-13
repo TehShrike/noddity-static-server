@@ -1,27 +1,13 @@
 const url = require('url')
 
-const denodeify = require('then-denodeify')
-
-const Linkifier = require('noddity-linkifier')
-const renderStatic = denodeify(require('noddity-render-static'))
-
-const Ractive = require('ractive')
-Ractive.DEBUG = false
-
-const Koa = require('koa')
 const Router = require('koa-router')
-const compress = require('koa-compress')
-const conditionalGet = require('koa-conditional-get')
 
 require('ractive').DEBUG = false
 
 const notFoundRegex = /Not Found/
 
-module.exports = function({ butler, assetsUrl, indexHtml, nonMarkdownContentUrl, data = {} }) {
-	const app = new Koa()
+module.exports = function({ butler, assetsUrl, lazyRender, nonMarkdownContentUrl }) {
 	const router = Router()
-
-	const lazyRender = makeLazyRenderer({ butler, data, indexHtml })
 	const getLastModified = makeLastModifiedWatcher({ butler })
 
 	function setContentHeaders(context) {
@@ -90,22 +76,7 @@ module.exports = function({ butler, assetsUrl, indexHtml, nonMarkdownContentUrl,
 		context.set('Location', redirectTo)
 	})
 
-	app.use(async function notFoundPage(context, next) {
-		await next()
-
-		if (context.status === 404) {
-			context.body = await lazyRender({
-				file: '404.md',
-				context
-			})
-		}
-	})
-
-	app.use(conditionalGet())
-	app.use(compress())
-	app.use(router.routes())
-
-	return app
+	return router
 }
 
 function makeLastModifiedWatcher({ butler }) {
@@ -121,53 +92,8 @@ function makeLastModifiedWatcher({ butler }) {
 	return () => lastModified
 }
 
-function makeLazyRenderer({ butler, data, indexHtml }) {
-	const linkifier = Linkifier('/')
-	const template = Ractive.parse(indexHtml, { preserveWhitespace: true })
-	const getPost = denodeify(butler.getPost)
 
-	let renderedPosts = {}
-
-	butler.on('index changed', () => renderedPosts = {})
-	butler.on('post changed', (postname) => renderedPosts[postname] = {})
-
-	return async function lazyRender({ key = '?', file, sessionData }) {
-		if (!renderedPosts[file]) {
-			renderedPosts[file] = {}
-		}
-
-		const postCache = renderedPosts[file]
-
-		if (!postCache[key]) {
-			const renderData = Object.assign({}, data, sessionData)
-
-			const [ templatePost, postToRender ] = await Promise.all([
-				getPost('post'),
-				getPost(file)
-			])
-
-			const html = await renderStatic(templatePost, postToRender, {
-				butler,
-				linkifier,
-				data: renderData,
-			})
-
-			const finalHtml = new Ractive({
-				template,
-				data: {
-					html,
-					metadata: postToRender.metadata
-				}
-			}).toHTML()
-
-			postCache[key] = finalHtml
-		}
-
-		return postCache[key]
-	}
-}
-
-async function handleRenderError({ lazyRender, error, context, file }) {
+async function handleRenderError({ error, context, file }) {
 	const notFound = notFoundRegex.test(error.message)
 
 	context.body = error.message
@@ -175,12 +101,6 @@ async function handleRenderError({ lazyRender, error, context, file }) {
 	if (notFound) {
 		console.log('404 Not found:', file)
 		context.status = 404
-		if (lazyRender) {
-			context.body = await lazyRender({
-				file: '404.md',
-				context
-			})
-		}
 	} else {
 		console.log(error)
 		context.status = 500
