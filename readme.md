@@ -21,6 +21,11 @@ const indexHtml = require('fs').readFileSync('./index.html', { encoding: 'utf8' 
 
 const contentUrl = 'https://content.yoursite.com/'
 
+const butler = Butler(contentUrl, level('server'), {
+	refreshEvery: 1000 * 60 * 5,
+	parallelPostRequests: 10
+})
+
 const lazyRender = makeLazyRenderer({
 	butler,
 	data: {
