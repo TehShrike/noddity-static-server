@@ -60,6 +60,22 @@ app.use(router.routes(), router.allowedMethods())
 app.listen(8000)
 ```
 
+# API
+
+## `noddityStaticServer(options)`
+
+Returns a [koa-router](https://github.com/alexmingoia/koa-router) instance.
+
+Takes an options map with these properties:
+
+- `butler`, a [noddity-butler](https://github.com/TehShrike/noddity-butler) instance
+- `assetsUrl`, a string url to redirect all requests to `/assets` to
+- `lazyRender`, a [noddity-lazy-static-render](https://github.com/TehShrike/noddity-lazy-static-render) instance
+- `nonMarkdownContentUrl`, a string url where static files matching `/content/.*` will be looked for. All `/content/*.md` files will still be served with the butler.
+- `assetExtensionsToServeFromContent`, an array of extensions to allow to be served from `nonMarkdownContentUrl`.  Any extensions not in this list will 404 and will not be served from the folder.  Defaults to `[ 'jpg', 'jpeg', 'gif', 'png' ]`
+
+# Notes
+
 This module is not very polished or extensible at the moment, lots of stuff is hardcoded.  I'm open to moving functionality out of this module and/or refactoring.  If you have any particular needs and want to help, open an issue.
 
 Some things this module currently does:

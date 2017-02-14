@@ -6,7 +6,15 @@ require('ractive').DEBUG = false
 
 const notFoundRegex = /Not Found/
 
-module.exports = function({ butler, assetsUrl, lazyRender, nonMarkdownContentUrl }) {
+const defaultAssetExtensionsToServeFromContentUrl = [ 'jpg', 'jpeg', 'gif', 'png' ]
+module.exports = function({
+	butler,
+	assetsUrl,
+	lazyRender,
+	nonMarkdownContentUrl,
+	assetExtensionsToServeFromContent = defaultAssetExtensionsToServeFromContentUrl
+}) {
+
 	const router = Router()
 	const getLastModified = makeLastModifiedWatcher({ butler })
 
@@ -67,7 +75,9 @@ module.exports = function({ butler, assetsUrl, lazyRender, nonMarkdownContentUrl
 		}
 	})
 
-	router.get('/:path(.+\\.):extension(jpg|jpeg|gif|png)', async (context, next) => {
+	const extensionPattern = assetExtensionsToServeFromContent.join('|')
+
+	router.get(`/:path(.+\\.):extension(${extensionPattern})`, async (context, next) => {
 		const { path, extension } = context.params
 
 		const redirectTo = url.resolve(nonMarkdownContentUrl, path + extension)
