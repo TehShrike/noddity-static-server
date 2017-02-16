@@ -2,9 +2,10 @@
   "name": "noddity-static-server",
   "version": "2.1.0",
   "description": "Serves up static HTML based on a Noddity source server",
-  "main": "index.js",
+  "main": "build.js",
   "scripts": {
-    "test-server": "node test/server.js"
+    "test-server": "npm run build && node test/server.js",
+    "build": "babel ./index.js --plugins=transform-async-to-generator -o build.js"
   },
   "repository": {
     "type": "git",
@@ -23,20 +24,19 @@
   },
   "homepage": "https://github.com/TehShrike/noddity-static-server#readme",
   "devDependencies": {
+    "babel-cli": "6.23.0",
     "babel-plugin-transform-async-to-generator": "6.16.0",
-    "babel-polyfill": "6.16.0",
-    "babel-register": "6.16.3",
+    "koa": "2.0.0-alpha.7",
     "koa-compress": "2.0.0",
     "koa-conditional-get": "2.0.0",
     "level-mem": "0.18.0",
     "ms": "0.7.1",
-    "noddity-linkifier": "~2.2.2",
-    "noddity-render-static": "~2.4.0",
     "noddity-butler": "~2.6.0",
-    "noddity-lazy-static-render": "~1.0.1"
+    "noddity-lazy-static-render": "~1.1.0",
+    "noddity-linkifier": "~2.2.2",
+    "noddity-render-static": "~2.4.0"
   },
   "dependencies": {
-    "koa": "2.0.0-alpha.7",
     "koa-router": "7.0.1"
   }
 }

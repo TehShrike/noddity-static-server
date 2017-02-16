@@ -2,8 +2,6 @@ const url = require('url')
 
 const Router = require('koa-router')
 
-require('ractive').DEBUG = false
-
 const notFoundRegex = /Not Found/
 
 const defaultAssetExtensionsToServeFromContentUrl = [ 'jpg', 'jpeg', 'gif', 'png' ]
