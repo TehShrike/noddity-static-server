@@ -4,6 +4,7 @@
   "description": "Serves up static HTML based on a Noddity source server",
   "main": "build.js",
   "scripts": {
+    "test": "echo \"npm run test-server\" && exit 0",
     "test-server": "npm run build && node test/server.js",
     "build": "babel ./index.js --plugins=transform-async-to-generator -o build.js"
   },
