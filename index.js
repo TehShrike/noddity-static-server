@@ -2,7 +2,7 @@ const url = require('url')
 
 const Router = require('koa-router')
 
-const notFoundRegex = /Not Found/
+const notFoundRegex = /returned status 404/
 
 const defaultAssetExtensionsToServeFromContentUrl = [ 'jpg', 'jpeg', 'gif', 'png' ]
 module.exports = function({
